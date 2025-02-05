@@ -10,6 +10,7 @@ public class Test {
     arr.insert(0, 14);
     arr.delete(2);
     arr.insert(1, 12);
+    arr.delete(0);
     arr.display();
   }
 }
