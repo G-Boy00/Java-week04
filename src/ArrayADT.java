@@ -1,43 +1,43 @@
-class ArrayADT {
-    private int[] arr;
-    private int size;
-    private int capacity;
+public class ArrayADT {
+    int[] arr;
+    boolean[] initialized;
+    int size = 0;
 
-    public ArrayADT(int capacity) {
-        this.capacity = capacity;
-        this.arr = new int[capacity];
-        this.size = 0;
+    public ArrayADT(int[] arr) {
+        this.arr = arr;
+        this.initialized = new boolean[arr.length];
     }
 
     public void insert(int index, int value) {
-        if (size == capacity) {
-            System.out.println("Array is full. Cannot insert.");
+        if (arr.length == size) {
             return;
         }
-        if (index < 0  || index > size) {
-            System.out.println("Invalid index.");
-            return;
+        int pos = index;
+        while (pos < arr.length && initialized[pos]) {
+            pos++;
         }
-        for (int i = size; i > index; i--) {
-            arr[i] = arr[i - 1];
+        if (pos >= arr.length) {
+            pos = arr.length - 1;
         }
+        int temp = arr[index];
         arr[index] = value;
-        size++;
+        initialized[index] = true;
+        for (int i = index + 1; i <= pos; i++) {
+            int temp1 = arr[i];
+            arr[i] = temp;
+            temp = temp1;
+
+            initialized[i] = true;
+        }
     }
 
     public void delete(int index) {
-        if (index < 0 || index >= size) {
-            System.out.println("Invalid index.");
-            return;
-        }
-        for (int i = index; i < size - 1; i++) {
-            arr[i] = arr[i + 1];
-        }
-        size--;
+        arr[index] = 0;
+        initialized[index] = false;
     }
 
     public int search(int value) {
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < arr.length; i++) {
             if (arr[i] == value) {
                 return i;
             }
@@ -46,24 +46,10 @@ class ArrayADT {
     }
 
     public void display() {
-        for (int i = 0; i < size; i++) {
-            System.out.print(arr[i] + " ");
+        for (int i = 0; i < arr.length; i++) {
+            if (initialized[i]) {
+                System.out.println("Position " + i + ": " + arr[i]);
+            }
         }
-        System.out.println();
     }
-
-    public static void main(String[] args) {
-        ArrayADT array = new ArrayADT(10);
-        array.insert(0, 1000);
-        array.insert(1, 1500);
-        array.insert(2, 2000);
-        array.display(); 
-        
-        array.delete(1);
-        array.display(); 
-        
-        System.out.println(array.search(15)); 
-        System.out.println(array.search(10)); 
-    }
-        
 }
